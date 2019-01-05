@@ -16,7 +16,12 @@ import (
 
 var mainPage = "https://www.ealing.gov.uk/site/custom_scripts/waste_collection/waste_collection.aspx"
 
-
+/*
+WARNING! This code does not work without modifications to net/http/cookie.go to allow broken cookie names.
+Ealing council use some shitty MS stack that spits out cookies with { and } in their names
+This issue prevents it from actually working, without bypassing the isCookieNameValid check:
+https://github.com/golang/go/issues/29580
+ */
 
 func main() {
 	jar, _ := cookiejar.New(nil)
