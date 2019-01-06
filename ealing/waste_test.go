@@ -14,11 +14,11 @@ func TestParseAddresses(t *testing.T) {
 	assert.Len(t, results, 58)
 
 
-	assert.Equal(t, "12125514        ", results[0].uprn)
-	assert.Equal(t, "DEAN COURT, BOWMANS CLOSE, ALL, WEST EALING, W13 9YU", results[0].address)
+	assert.Equal(t, "12125514        ", results[0].UPRN)
+	assert.Equal(t, "DEAN COURT, BOWMANS CLOSE, ALL, WEST EALING, W13 9YU", results[0].Address)
 
-	assert.Equal(t, "12003001        ", results[57].uprn)
-	assert.Equal(t, "57, DEAN COURT, BOWMANS CLOSE, ALL, WEST EALING, W13 9YU", results[57].address)
+	assert.Equal(t, "12003001        ", results[57].UPRN)
+	assert.Equal(t, "57, DEAN COURT, BOWMANS CLOSE, ALL, WEST EALING, W13 9YU", results[57].Address)
 
 }
 
@@ -193,7 +193,7 @@ var addressesResponse = `<!DOCTYPE html>
      }
 
 
-     //when browser loads populate address fields
+     //when browser loads populate Address fields
      if (typeof window.onload == 'function') { detectCheckbox = window.onload; }
      window.onload = function () {
          getSelectedAddress();
@@ -228,7 +228,7 @@ var addressesResponse = `<!DOCTYPE html>
 
          //assign the UPRN to hidden field
          document.getElementById("hiddenUPRN").value = addressSelection;
-         //assign the address fields - display back inthe black box above search result
+         //assign the Address fields - display back inthe black box above search result
          document.getElementById("hiddenAddress").value = addressSelection_text;
 
          addressSelection_text = addressSelection_text.split(",");
@@ -237,8 +237,8 @@ var addressesResponse = `<!DOCTYPE html>
          var iAddrElement = 0;
          var i2 = 0;
 
-         //assign address texts fields
-         if (addressSelection_text[0] != "Select your address") {
+         //assign Address texts fields
+         if (addressSelection_text[0] != "Select your Address") {
 
              try {
                  for (var i = 0; i <= addressSelection_text.length; i++) {
@@ -312,7 +312,7 @@ var addressesResponse = `<!DOCTYPE html>
 
 
 
-     //Validate address postcode
+     //Validate Address postcode
      if (typeof window.onload == 'function') { formatPostCode_2 = window.onload; }
      window.onload = function () {
          if (window.formatPostCode_2) formatPostCode_2();
@@ -371,7 +371,7 @@ var addressesResponse = `<!DOCTYPE html>
          var lookup_list = document.getElementById('selectLookup');
 
          if (lookup_list.options.length > 1) {
-             document.getElementById('listLabel').innerHTML = "&laquo Please select your address &raquo; &nbsp; ";
+             document.getElementById('listLabel').innerHTML = "&laquo Please select your Address &raquo; &nbsp; ";
          }
          if (lookup_list.options.length <= 1) {
              document.getElementById('listLabel').innerHTM = "";
@@ -399,7 +399,7 @@ var addressesResponse = `<!DOCTYPE html>
      function blockEmptyDateRequest() {
          if (document.getElementById('hiddenUPRN').value == "" || document.getElementById('hiddenUPRN').value == "no") {
 
-             document.getElementById('Error_Field').innerHTML = "Please provide a valid address";
+             document.getElementById('Error_Field').innerHTML = "Please provide a valid Address";
              document.getElementById('txtLookupPostCode').focus();
 
              return false;
@@ -441,7 +441,7 @@ var addressesResponse = `<!DOCTYPE html>
 
              default:
 
-                 alert("Unfortunately, no calendar is available for the selected address.\n\nPlease refer to the schedule below.");
+                 alert("Unfortunately, no calendar is available for the selected Address.\n\nPlease refer to the schedule below.");
 
                  return false;
 
@@ -491,8 +491,8 @@ Collection dates over Christmas and New Year have changed<br><a href="https://ww
 
    <tr><td colspan="2">
 		<b>
-			Enter your postcode and select your address from the dropdown menu.<br>
-			If there are multiple properties at your address please ensure you select your specific flat,<br>
+			Enter your postcode and select your Address from the dropdown menu.<br>
+			If there are multiple properties at your Address please ensure you select your specific flat,<br>
 			you may have to scroll to the bottom of the list.
 		</b>
 	</td></tr>

@@ -52,21 +52,6 @@ func (c *Client) LoadAddressesForPostCode(postcode string) []*Address{
 	}
 }
 
-func (c *Client) LoadCollectionTimesForAddress(address *Address) string {
-	collectionMap := c.loadCollectionsForAddres(address)
-
-
-	for collectionType, collections := range collectionMap {
-		log.Println(collectionType)
-		for _, collection := range collections {
-			log.Println("\t", collection.Date, collection.Frequency)
-		}
-	}
-
-	return ""
-}
-
-
 func (c *Client) loadAddresses(postcode, viewState, viewStateGenerator, eventValidation string) []*Address {
 
 	urlValues := url.Values{
@@ -102,7 +87,7 @@ func (c *Client) loadAddresses(postcode, viewState, viewStateGenerator, eventVal
 
 
 
-func (c *Client) loadCollectionsForAddres(address *Address) map[string][]*Collection {
+func (c *Client) LoadCollectionsForAddres(address *Address) map[string][]*Collection {
 
 	/*
 			hiddenLookup	COLLECTION
@@ -118,8 +103,8 @@ func (c *Client) loadCollectionsForAddres(address *Address) map[string][]*Collec
 
 	urlValues := url.Values{
 		"hiddenLookup": {"COLLECTION"},
-		"hiddenUPRN": {address.uprn},
-		"hiddenAddress": {address.address},
+		"hiddenUPRN": {address.UPRN},
+		"hiddenAddress": {address.Address},
 		//"hiddenTempScheduleAvailable": {""},
 		//"hiddenCollectionCode": {""},
 		//"hiddenDocPath": {"https://www.ealing.gov.uk/site/custom_scripts/waste_collection/docs/"},
@@ -221,15 +206,15 @@ func getMatchesFromRegex(haystack, regex string) []string {
 }
 
 type Address struct {
-	uprn string
-	address string
+	UPRN    string
+	Address string
 }
 
 func parseAddresses(addressResponse string) []*Address{
 
 	//need to find this line: <select name="selectLookup" id="selectLookup" onchange="getSelectedAddress()">
 	//then keep going til we get to this line </select>
-	//and build address records from each line between
+	//and build Address records from each line between
 
 	lines := strings.Split(addressResponse, "\n")
 
@@ -247,7 +232,7 @@ func parseAddresses(addressResponse string) []*Address{
 		if zone {
 			if strings.Contains(line, "<option value=") {
 				uprn, address := ParseAddressOptionLine(line)
-				res = append(res, &Address{uprn: uprn, address: address})
+				res = append(res, &Address{UPRN: uprn, Address: address})
 			}
 		}
 

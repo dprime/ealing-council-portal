@@ -3,6 +3,9 @@ package main
 import (
 	"os"
 	"github.com/dprime/ealing-council-portal/ealing"
+	"bufio"
+	"fmt"
+	"strconv"
 )
 
 
@@ -39,16 +42,68 @@ func main() {
 
 	client := ealing.NewClient()
 
-	postCode := os.Args[1]
+	postCode := getPostcode()
+	if postCode == "" {
+		fmt.Println("error no postcode supplied")
+		os.Exit(1)
+	}
 
 	addresses := client.LoadAddressesForPostCode(postCode)
 
+	if len(addresses) == 0 {
+		fmt.Println("error no addresses found for postcode", postCode, ". Perhaps it's not an ealing postcode or it was mistyped or mis formatted? It needs to be upper case with a space between the two sections eg W1 2AA")
+		os.Exit(1)
+	}
+
 	//pick an address
 
-	address := addresses[48]
+	address := getAddress(addresses)
+	fmt.Println("picked: ", address.Address)
 
-	client.LoadCollectionTimesForAddress(address)
+	collectionMap := client.LoadCollectionsForAddres(address)
 
+	for collectionType, collections := range collectionMap {
+		fmt.Println(collectionType)
+		for _, collection := range collections {
+			fmt.Println("\t", collection.Date, collection.Frequency)
+		}
+	}
 
 }
 
+
+func getAddress(addresses []*ealing.Address) *ealing.Address{
+	fmt.Println("Please type the number of your address from the following list. If your address does not appear, please check your postcode is formatted correctly (eg W1 2AA)")
+	for i, address := range addresses {
+		fmt.Printf("[%d] %s\n", i, address.Address)
+	}
+
+	reader := bufio.NewReader(os.Stdin)
+	text, _ := reader.ReadString('\n')
+	text = text[:len(text)-1]
+	addressId, err := strconv.ParseInt(text, 10, 64)
+	if err != nil {
+		fmt.Println("error", text, "is not a valid integer")
+		os.Exit(1)
+	} else {
+		if addressId < 0 || int(addressId) >= len(addresses) {
+			fmt.Println("error", addressId, "is outside of the range of options available")
+			os.Exit(1)
+		} else {
+			return addresses[addressId]
+		}
+	}
+
+	return nil
+}
+
+
+func getPostcode() string{
+	fmt.Print("Please type your postcode formatted like W1 2AA: ")
+
+	reader := bufio.NewReader(os.Stdin)
+	text, _ := reader.ReadString('\n')
+	text = text[:len(text)-1]
+
+	return text
+}
